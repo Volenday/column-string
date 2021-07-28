@@ -7,7 +7,7 @@ const browser = typeof process.browser !== 'undefined' ? process.browser : true;
 
 import Filter from './filter';
 
-export default props => {
+const ColumnString = props => {
 	const {
 		editable = false,
 		copyable = false,
@@ -190,3 +190,5 @@ const Cell = memo(
 		);
 	}
 );
+
+export default ColumnString;

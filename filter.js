@@ -4,7 +4,7 @@ import { FilterFilled, FilterOutlined } from '@ant-design/icons';
 import striptags from 'striptags';
 
 const Filter = ({ column, id, list, setFilter }) => {
-	const [selected, setSelected] = useState([]);
+	const [selected, setSelected] = useState(['(Blank)', ...list]);
 	const [newOptions, setNewOptions] = useState(['(Blank)', ...list]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [sort, setSort] = useState('');
