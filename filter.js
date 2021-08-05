@@ -1,7 +1,8 @@
-import React, { memo, useEffect, useState } from 'react';
-import { Button, Checkbox, Divider, Input, List, Popover } from 'antd';
+import React, { memo, useEffect, useState, useCallback } from 'react';
+import { Button, Checkbox, Divider, Input, Popover } from 'antd';
 import { FilterFilled, FilterOutlined } from '@ant-design/icons';
 import striptags from 'striptags';
+import { FixedSizeList } from 'react-window';
 
 const Filter = ({ column, id, list, setFilter }) => {
 	const [selected, setSelected] = useState(['(Blank)', ...list]);
@@ -10,6 +11,7 @@ const Filter = ({ column, id, list, setFilter }) => {
 	const [sort, setSort] = useState('');
 	const [selectedAll, setSelectedtAll] = useState(false);
 
+	const listCount = newOptions.length;
 	const withFilterValue = column.filterValue ? (column.filterValue.length !== 0 ? true : false) : false;
 
 	useEffect(() => {
@@ -31,47 +33,93 @@ const Filter = ({ column, id, list, setFilter }) => {
 		else setSelected([...selected, value]);
 	};
 
-	const renderItem = item => {
-		const text = striptags(item);
+	// const renderItem = item => {
+	// 	const text = striptags(item);
 
-		const finalValue =
-			text.length >= 90 ? (
-				<div>
-					{text.substr(0, 90).trim()}...
-					<Popover
-						content={
-							<>
-								<div dangerouslySetInnerHTML={{ __html: text }} />
-								<br />
-							</>
-						}
-						trigger="hover"
-						placement="top"
-						style={{ width: 350 }}>
-						<Button
-							type="link"
-							onClick={e => e.stopPropagation()}
-							size="small"
-							style={{ lineHeight: 0.5, marginLeft: 10, padding: 0, height: 'auto' }}>
-							<span style={{ color: '#1890ff' }}>show more</span>
-						</Button>
-					</Popover>
+	// 	const finalValue =
+	// 		text.length >= 90 ? (
+	// 			<div>
+	// 				{text.substr(0, 90).trim()}...
+	// 				<Popover
+	// 					content={
+	// 						<>
+	// 							<div dangerouslySetInnerHTML={{ __html: text }} />
+	// 							<br />
+	// 						</>
+	// 					}
+	// 					trigger="hover"
+	// 					placement="top"
+	// 					style={{ width: 350 }}>
+	// 					<Button
+	// 						type="link"
+	// 						onClick={e => e.stopPropagation()}
+	// 						size="small"
+	// 						style={{ lineHeight: 0.5, marginLeft: 10, padding: 0, height: 'auto' }}>
+	// 						<span style={{ color: '#1890ff' }}>show more</span>
+	// 					</Button>
+	// 				</Popover>
+	// 			</div>
+	// 		) : (
+	// 			text
+	// 		);
+
+	// 	return (
+	// 		<List.Item style={{ cursor: 'pointer', padding: '5px 0px' }}>
+	// 			<Checkbox
+	// 				checked={selected.includes(item)}
+	// 				onChange={() => selectItem(item)}
+	// 				style={{ textAlign: 'justify' }}>
+	// 				{finalValue}
+	// 			</Checkbox>
+	// 		</List.Item>
+	// 	);
+	// };
+
+	const Row = useCallback(
+		({ index, style }) => {
+			const item = newOptions[index];
+			const text = striptags(item);
+
+			const finalValue =
+				text.length >= 90 ? (
+					<div>
+						{text.substr(0, 90).trim()}...
+						<Popover
+							content={
+								<>
+									<div dangerouslySetInnerHTML={{ __html: text }} />
+									<br />
+								</>
+							}
+							trigger="hover"
+							placement="top"
+							style={{ width: 350 }}>
+							<Button
+								type="link"
+								onClick={e => e.stopPropagation()}
+								size="small"
+								style={{ lineHeight: 0.5, marginLeft: 10, padding: 0, height: 'auto' }}>
+								<span style={{ color: '#1890ff' }}>show more</span>
+							</Button>
+						</Popover>
+					</div>
+				) : (
+					text
+				);
+
+			return (
+				<div style={{ ...style, cursor: 'pointer', padding: '5px 0px', borderBottom: '1px solid #f0f0f0' }}>
+					<Checkbox
+						checked={selected.includes(item)}
+						onChange={() => selectItem(item)}
+						style={{ textAlign: 'justify' }}>
+						{finalValue}
+					</Checkbox>
 				</div>
-			) : (
-				text
 			);
-
-		return (
-			<List.Item style={{ cursor: 'pointer', padding: '5px 0px' }}>
-				<Checkbox
-					checked={selected.includes(item)}
-					onChange={() => selectItem(item)}
-					style={{ textAlign: 'justify' }}>
-					{finalValue}
-				</Checkbox>
-			</List.Item>
-		);
-	};
+		},
+		[newOptions, selected]
+	);
 
 	const renderCount = () => {
 		if (!column.filterValue) return null;
@@ -144,11 +192,10 @@ const Filter = ({ column, id, list, setFilter }) => {
 						onSearch={handleSearch}
 						placeholder="Search"
 					/>
-					<List
-						dataSource={newOptions}
-						renderItem={renderItem}
-						style={{ height: 150, overflowY: 'scroll' }}
-					/>
+
+					<FixedSizeList height={150} itemCount={listCount} itemSize={30} width={300}>
+						{Row}
+					</FixedSizeList>
 				</div>
 				<Divider style={{ margin: '10px 0px' }} />
 				<div>
