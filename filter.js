@@ -81,9 +81,9 @@ const Filter = ({ column, id, list, setFilter }) => {
 			const text = striptags(item);
 
 			const finalValue =
-				text.length >= 90 ? (
-					<div>
-						{text.substr(0, 90).trim()}...
+				text.length >= 40 ? (
+					<div style={{ display: 'flex' }}>
+						<span>{text.substr(0, 20).trim()}...</span>
 						<Popover
 							content={
 								<>
