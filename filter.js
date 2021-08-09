@@ -81,9 +81,9 @@ const Filter = ({ column, id, list, setFilter }) => {
 			const text = striptags(item);
 
 			const finalValue =
-				text.length >= 40 ? (
+				text.length >= 50 ? (
 					<div style={{ display: 'flex' }}>
-						<span>{text.substr(0, 20).trim()}...</span>
+						<span>{text.substr(0, 50).trim()}...</span>
 						<Popover
 							content={
 								<>
@@ -193,7 +193,7 @@ const Filter = ({ column, id, list, setFilter }) => {
 						placeholder="Search"
 					/>
 
-					<FixedSizeList height={150} itemCount={listCount} itemSize={30} width={300}>
+					<FixedSizeList height={150} itemCount={listCount} itemSize={30} width={500}>
 						{Row}
 					</FixedSizeList>
 				</div>
