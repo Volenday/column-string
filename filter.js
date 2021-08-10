@@ -33,48 +33,6 @@ const Filter = ({ column, id, list, setFilter }) => {
 		else setSelected([...selected, value]);
 	};
 
-	// const renderItem = item => {
-	// 	const text = striptags(item);
-
-	// 	const finalValue =
-	// 		text.length >= 90 ? (
-	// 			<div>
-	// 				{text.substr(0, 90).trim()}...
-	// 				<Popover
-	// 					content={
-	// 						<>
-	// 							<div dangerouslySetInnerHTML={{ __html: text }} />
-	// 							<br />
-	// 						</>
-	// 					}
-	// 					trigger="hover"
-	// 					placement="top"
-	// 					style={{ width: 350 }}>
-	// 					<Button
-	// 						type="link"
-	// 						onClick={e => e.stopPropagation()}
-	// 						size="small"
-	// 						style={{ lineHeight: 0.5, marginLeft: 10, padding: 0, height: 'auto' }}>
-	// 						<span style={{ color: '#1890ff' }}>show more</span>
-	// 					</Button>
-	// 				</Popover>
-	// 			</div>
-	// 		) : (
-	// 			text
-	// 		);
-
-	// 	return (
-	// 		<List.Item style={{ cursor: 'pointer', padding: '5px 0px' }}>
-	// 			<Checkbox
-	// 				checked={selected.includes(item)}
-	// 				onChange={() => selectItem(item)}
-	// 				style={{ textAlign: 'justify' }}>
-	// 				{finalValue}
-	// 			</Checkbox>
-	// 		</List.Item>
-	// 	);
-	// };
-
 	const Row = useCallback(
 		({ index, style }) => {
 			const item = newOptions[index];
