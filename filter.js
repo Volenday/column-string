@@ -16,7 +16,9 @@ const Filter = ({ column, id, list, setFilter }) => {
 
 	useEffect(() => {
 		if (!!column.filterValue)
-			setSelected(column.filterValue.map(d => (d === '' ? '(Blank)' : d))),
+			setSelected(prev =>
+				column.filterValue.length === 0 ? prev : column.filterValue.map(d => (d === '' ? '(Blank)' : d))
+			),
 				setSelectedtAll(column.filterValue.length === list.length + 1 ? true : false);
 	}, [JSON.stringify(column.filterValue)]);
 
@@ -92,10 +94,8 @@ const Filter = ({ column, id, list, setFilter }) => {
 	};
 
 	const onOk = () => {
-		setFilter(
-			id,
-			selected.map(d => (d === '(Blank)' ? '' : d))
-		);
+		setFilter(id, selectedAll ? [] : selected.map(d => (d === '(Blank)' ? '' : d)));
+
 		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
 		else column.clearSortBy();
 	};
@@ -171,7 +171,7 @@ const Filter = ({ column, id, list, setFilter }) => {
 						<Button onClick={closePopover} type="default">
 							Cancel
 						</Button>
-						<Button onClick={onOk} type="primary">
+						<Button disabled={selected.length === 0} onClick={onOk} type="primary">
 							OK
 						</Button>
 					</div>
