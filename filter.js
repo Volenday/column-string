@@ -90,11 +90,11 @@ const Filter = ({ column, id, list, setFilter }) => {
 
 	const handleSearch = value => {
 		if (value === '') return setNewOptions(list);
-		setNewOptions(list.filter(d => d.match(new RegExp(value, 'i'))));
+		setNewOptions(selected.filter(d => d.match(new RegExp(value, 'i'))));
 	};
 
 	const onOk = () => {
-		setFilter(id, selectedAll ? [] : selected.map(d => (d === '(Blank)' ? '' : d)));
+		setFilter(id, selectedAll ? newOptions.length > 0 ? newOptions : [] : selected.map(d => (d === '(Blank)' ? '' : d)));
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
 		else column.clearSortBy();
