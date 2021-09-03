@@ -5,7 +5,7 @@ import reactStringReplace from 'react-string-replace';
 
 const browser = typeof process.browser !== 'undefined' ? process.browser : true;
 
-if (browser) require('./styles.css');
+if (browser) require('./style.css');
 import Filter from './filter';
 
 const ColumnString = props => {
