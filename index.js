@@ -188,17 +188,16 @@ const Cell = memo(
 				}
 				trigger="click"
 				visible={visible}
+				zIndex={99999}
 				onVisibleChange={() => setVisible(true)}
 				placement="top"
 				style={{ width: 350 }}>
-				<RenderWithTooltip>
-					<Typography.Paragraph
-						className="ellipsis"
-						style={{ cursor: 'pointer', marginBottom: 0 }}
-						copyable={copyable ? { onCopy: () => onCopy(finalValue, original) } : false}>
-						{finalValue}
-					</Typography.Paragraph>
-				</RenderWithTooltip>
+				<Typography.Paragraph
+					className="ellipsis"
+					style={{ cursor: 'pointer', marginBottom: 0 }}
+					copyable={copyable ? { onCopy: () => onCopy(finalValue, original) } : false}>
+					<RenderWithTooltip>{finalValue}</RenderWithTooltip>
+				</Typography.Paragraph>
 			</Popover>
 		) : (
 			<RenderWithTooltip>
