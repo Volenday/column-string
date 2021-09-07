@@ -12,6 +12,7 @@ const ColumnString = props => {
 	const {
 		editable = false,
 		copyable = false,
+		clickable = false,
 		format = [],
 		id,
 		keywords = '',
@@ -19,6 +20,7 @@ const ColumnString = props => {
 		multiple = false,
 		onChange,
 		onCopy = () => {},
+		onCustomClick = () => {},
 		poppable = false,
 		richText,
 		stripHTMLTags = false,
@@ -36,6 +38,7 @@ const ColumnString = props => {
 						{...props}
 						other={{
 							copyable,
+							clickable,
 							editable,
 							format,
 							id,
@@ -43,6 +46,7 @@ const ColumnString = props => {
 							multiple,
 							onChange,
 							onCopy,
+							onCustomClick,
 							poppable,
 							richText,
 							stripHTMLTags,
@@ -79,6 +83,7 @@ const Cell = memo(
 		row: { original },
 		other: {
 			copyable,
+			clickable,
 			editable,
 			format,
 			id,
@@ -86,6 +91,7 @@ const Cell = memo(
 			multiple,
 			onChange,
 			onCopy,
+			onCustomClick,
 			poppable,
 			richText,
 			stripHTMLTags,
@@ -203,7 +209,8 @@ const Cell = memo(
 			<RenderWithTooltip>
 				<Typography.Paragraph
 					className="ellipsis"
-					style={{ marginBottom: 0 }}
+					style={{ marginBottom: 0, cursor: clickable ? 'pointer' : 'auto' }}
+					onClick={() => (clickable ? onCustomClick(original) : null)}
 					copyable={copyable ? { onCopy: () => onCopy(striptags(value), original) } : false}>
 					{finalValue}
 				</Typography.Paragraph>
