@@ -99,7 +99,7 @@ const Filter = ({ column, id, list, setFilter }) => {
 			id,
 			selectedAll
 				? isEqual(newOptions.filter(d => d !== '(Blank)'), list) 
-					? null // Sir pag empty array walang data na binabalik pag ka fetch kaya nag null ko
+					? []
 					: newOptions
 				: selected.map(d => (d === '(Blank)' ? '' : d))
 		);
