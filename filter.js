@@ -3,6 +3,7 @@ import { Button, Checkbox, Divider, Input, Popover } from 'antd';
 import { FilterFilled, FilterOutlined } from '@ant-design/icons';
 import striptags from 'striptags';
 import { FixedSizeList } from 'react-window';
+import { isEqual } from 'lodash';
 
 const Filter = ({ column, id, list, setFilter }) => {
 	const [selected, setSelected] = useState(['(Blank)', ...list]);
@@ -92,9 +93,16 @@ const Filter = ({ column, id, list, setFilter }) => {
 		if (value === '') return setNewOptions(list);
 		setNewOptions(list.filter(d => d.match(new RegExp(value, 'i'))));
 	};
-
+	
 	const onOk = () => {
-		setFilter(id, selectedAll ? [] : selected.map(d => (d === '(Blank)' ? '' : d)));
+		setFilter(
+			id,
+			selectedAll
+				? isEqual(newOptions.filter(d => d !== '(Blank)'), list) 
+					? []
+					: newOptions
+				: selected.map(d => (d === '(Blank)' ? '' : d))
+		);
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
 		else column.clearSortBy();
