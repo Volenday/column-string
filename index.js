@@ -65,8 +65,16 @@ const ColumnString = props => {
 	};
 };
 
+const removeHTMLEntities = text => {
+	const span = document.createElement('span');
+	return text.replace(/&[#A-Za-z0-9]+;/gi, entity => {
+		span.innerHTML = entity;
+		return span.innerText;
+	});
+};
+
 const highlightsKeywords = (keywords, stripHTMLTags = false, toConvert) => {
-	const strip = stripHTMLTags ? striptags(toConvert) : toConvert;
+	const strip = stripHTMLTags ? removeHTMLEntities(striptags(toConvert)) : toConvert;
 	const replaceText = reactStringReplace(strip, new RegExp('(' + keywords + ')', 'gi'), (match, index) => {
 		return (
 			<span key={`${match}-${index}`} style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
