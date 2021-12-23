@@ -157,6 +157,7 @@ const Filter = ({ column, id, list, setFilter, loading = false }) => {
 					</div>
 					<Input.Search
 						allowClear
+						disabled={loading}
 						onKeyUp={e => handleSearch(e.target.value)}
 						onSearch={handleSearch}
 						placeholder="Search"
