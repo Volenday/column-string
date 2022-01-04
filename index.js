@@ -17,6 +17,7 @@ const ColumnString = props => {
 		id,
 		keywords = '',
 		list = [],
+		loading = false,
 		multiple = false,
 		onChange,
 		onCopy = () => {},
@@ -59,7 +60,7 @@ const ColumnString = props => {
 		Filter: props =>
 			browser ? (
 				<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
-					<Filter {...props} id={id} list={list} />
+					<Filter {...props} id={id} list={list} loading={loading} />
 				</Suspense>
 			) : null
 	};
