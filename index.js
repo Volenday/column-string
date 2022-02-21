@@ -5,7 +5,6 @@ import reactStringReplace from 'react-string-replace';
 
 const browser = typeof process.browser !== 'undefined' ? process.browser : true;
 
-if (browser) require('./style.css');
 import Filter from './filter';
 
 const ColumnString = props => {
@@ -208,7 +207,7 @@ const Cell = memo(
 				placement="top"
 				style={{ width: 350 }}>
 				<Typography.Paragraph
-					className="ellipsis"
+					ellipsis={{ rows: 2 }}
 					style={{ cursor: 'pointer', marginBottom: 0 }}
 					copyable={copyable ? { onCopy: () => onCopy(finalValue, original) } : false}>
 					<RenderWithTooltip>{finalValue}</RenderWithTooltip>
@@ -217,7 +216,7 @@ const Cell = memo(
 		) : (
 			<RenderWithTooltip>
 				<Typography.Paragraph
-					className="ellipsis"
+					ellipsis={{ rows: 2 }}
 					style={{ marginBottom: 0, cursor: clickable ? 'pointer' : 'auto' }}
 					onClick={() => (clickable ? onCustomClick(original) : null)}
 					copyable={copyable ? { onCopy: () => onCopy(striptags(value), original) } : false}>
