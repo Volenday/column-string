@@ -9,7 +9,6 @@ import Filter from './filter';
 
 const ColumnString = props => {
 	const {
-		editable = false,
 		copyable = false,
 		clickable = false,
 		format = [],
@@ -17,12 +16,9 @@ const ColumnString = props => {
 		keywords = '',
 		list = [],
 		loading = false,
-		multiple = false,
-		onChange,
 		onCopy = () => {},
 		onCustomClick = () => {},
 		poppable = false,
-		richText,
 		stripHTMLTags = false,
 		showTooltip = false,
 		tooltip = '',
@@ -39,16 +35,11 @@ const ColumnString = props => {
 						other={{
 							copyable,
 							clickable,
-							editable,
 							format,
-							id,
 							keywords,
-							multiple,
-							onChange,
 							onCopy,
 							onCustomClick,
 							poppable,
-							richText,
 							stripHTMLTags,
 							showTooltip,
 							tooltip
@@ -94,16 +85,11 @@ const Cell = memo(
 		other: {
 			copyable,
 			clickable,
-			editable,
 			format,
-			id,
 			keywords,
-			multiple,
-			onChange,
 			onCopy,
 			onCustomClick,
 			poppable,
-			richText,
 			stripHTMLTags,
 			showTooltip,
 			tooltip
@@ -122,41 +108,6 @@ const Cell = memo(
 				</Tooltip>
 			);
 		};
-
-		if (editable && !multiple && !richText) {
-			const InputText = require('@volenday/input-text').default;
-			const { Controller, useForm } = require('react-hook-form');
-
-			const formRef = useRef();
-			const originalValue = value;
-			const { control, handleSubmit } = useForm({ defaultValues: { [id]: value } });
-			const onSubmit = values => onChange({ ...values, Id: original.Id });
-
-			return (
-				<RenderWithTooltip>
-					<form onSubmit={handleSubmit(onSubmit)} ref={formRef} style={{ width: '100%' }}>
-						<Controller
-							control={control}
-							name={id}
-							render={({ onChange, value, name }) => (
-								<InputText
-									format={format}
-									id={name}
-									onBlur={() =>
-										originalValue !== value &&
-										formRef.current.dispatchEvent(new Event('submit', { cancelable: true }))
-									}
-									onChange={e => onChange(e.target.value)}
-									onPressEnter={e => e.target.blur()}
-									withLabel={false}
-									value={value}
-								/>
-							)}
-						/>
-					</form>
-				</RenderWithTooltip>
-			);
-		}
 
 		if (format.length !== 0) {
 			const Cleave = require('cleave.js/react');

@@ -63,7 +63,6 @@ module.exports = {
 		'cleave.js/react': 'cleave.js/react',
 		react: 'react',
 		'react-dom': 'react-dom',
-		'react-hook-form': 'react-hook-form',
 		'react-string-replace': 'react-string-replace',
 		striptags: 'striptags',
 		'react-window': 'react-window'
