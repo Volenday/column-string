@@ -39,7 +39,7 @@ const Filter = ({ column, id, list, setFilter, loading = false }) => {
 	const Row = useCallback(
 		({ index, style }) => {
 			const item = newOptions[index];
-			const text = striptags(item);
+			const text = striptags(typeof item === 'string' ? item : '');
 
 			const finalValue =
 				text.length >= 55 ? (

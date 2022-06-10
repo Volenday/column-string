@@ -74,7 +74,9 @@ const removeHTMLEntities = text => {
 };
 
 const highlightsKeywords = (keywords, stripHTMLTags = false, toConvert) => {
-	const strip = stripHTMLTags ? removeHTMLEntities(striptags(toConvert)) : toConvert;
+	const strip = stripHTMLTags
+		? removeHTMLEntities(striptags(typeof toConvert === 'string' ? toConvert : ''))
+		: toConvert;
 	const replaceText = reactStringReplace(strip, new RegExp('(' + keywords + ')', 'gi'), (match, index) => {
 		return (
 			<span key={`${match}-${index}`} style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
@@ -219,7 +221,13 @@ const Cell = memo(
 					ellipsis={{ rows: 2 }}
 					style={{ marginBottom: 0, cursor: clickable ? 'pointer' : 'auto' }}
 					onClick={() => (clickable ? onCustomClick(original) : null)}
-					copyable={copyable ? { onCopy: () => onCopy(striptags(value), original) } : false}>
+					copyable={
+						copyable
+							? {
+									onCopy: () => onCopy(striptags(typeof value === 'string' ? value : ''), original)
+							  }
+							: false
+					}>
 					{finalValue}
 				</Typography.Paragraph>
 			</RenderWithTooltip>
