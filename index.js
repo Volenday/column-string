@@ -2,6 +2,7 @@ import React, { memo, Suspense, useRef, useState } from 'react';
 import { Button, Popover, Skeleton, Tooltip, Typography } from 'antd';
 import striptags from 'striptags';
 import reactStringReplace from 'react-string-replace';
+import { words } from 'lodash';
 
 const browser = typeof process.browser !== 'undefined' ? process.browser : true;
 
@@ -77,14 +78,14 @@ const highlightsKeywords = (keywords, stripHTMLTags = false, toConvert) => {
 	const strip = stripHTMLTags
 		? removeHTMLEntities(striptags(typeof toConvert === 'string' ? toConvert : ''))
 		: toConvert;
-	const replaceText = reactStringReplace(strip, new RegExp('(' + keywords + ')', 'gi'), (match, index) => {
-		return (
-			<span key={`${match}-${index}`} style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
-				{match}
-			</span>
-		);
-	});
-
+	const regxWords = keywords ? words(keywords, /[a-zA-Z0-9]+/gi).join('.+') : '';
+	const replaceText = regxWords
+		? reactStringReplace(strip, new RegExp('(' + regxWords + ')', 'i'), (match, index) => (
+				<span key={`${match}-${index}`} style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
+					{match}
+				</span>
+		  ))
+		: strip;
 	return replaceText;
 };
 
