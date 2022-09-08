@@ -5,7 +5,7 @@ import striptags from 'striptags';
 import { FixedSizeList } from 'react-window';
 import { isEqual } from 'lodash';
 
-const Filter = ({ column, id, list, setFilter, loading = false }) => {
+const Filter = ({ column, id, list, setFilter, disableSort, loading = false }) => {
 	const [selected, setSelected] = useState(['(Blank)', ...list]);
 	const [newOptions, setNewOptions] = useState(['(Blank)', ...list]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
@@ -135,22 +135,26 @@ const Filter = ({ column, id, list, setFilter, loading = false }) => {
 			z2aType = sort === 'DESC' ? 'primary' : 'default';
 		return (
 			<>
-				<div>
-					<h4>Sort</h4>
-					<Button
-						onClick={() => (sort !== 'ASC' ? setSort('ASC') : setSort(''))}
-						type={a2zType}
-						style={{ width: '49%' }}>
-						A to Z
-					</Button>
-					<Button
-						onClick={() => (sort !== 'DESC' ? setSort('DESC') : setSort(''))}
-						type={z2aType}
-						style={{ marginLeft: '2%', width: '49%' }}>
-						Z to A
-					</Button>
-				</div>
-				<Divider style={{ margin: '10px 0px' }} />
+				{!disableSort && (
+					<>
+						<div>
+							<h4>Sort</h4>
+							<Button
+								onClick={() => (sort !== 'ASC' ? setSort('ASC') : setSort(''))}
+								type={a2zType}
+								style={{ width: '49%' }}>
+								A to Z
+							</Button>
+							<Button
+								onClick={() => (sort !== 'DESC' ? setSort('DESC') : setSort(''))}
+								type={z2aType}
+								style={{ marginLeft: '2%', width: '49%' }}>
+								Z to A
+							</Button>
+						</div>
+						<Divider style={{ margin: '10px 0px' }} />
+					</>
+				)}
 				<div>
 					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 						<h4>Filter {renderCount()}</h4>

@@ -27,6 +27,7 @@ const ColumnString = props => {
 		stripHTMLTags = false,
 		showTooltip = false,
 		tooltip = '',
+		disableSort = false,
 		...defaultProps
 	} = props;
 
@@ -60,7 +61,7 @@ const ColumnString = props => {
 		Filter: props =>
 			browser ? (
 				<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
-					<Filter {...props} id={id} list={list} loading={loading} />
+					<Filter {...props} disableSort={disableSort} id={id} list={list} loading={loading} />
 				</Suspense>
 			) : null
 	};
