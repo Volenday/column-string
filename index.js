@@ -33,6 +33,7 @@ const ColumnString = props => {
 
 	return {
 		...defaultProps,
+		disableSortBy,
 		Cell: props =>
 			browser ? (
 				<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
