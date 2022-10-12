@@ -5,7 +5,7 @@ import striptags from 'striptags';
 import { FixedSizeList } from 'react-window';
 import { isEqual } from 'lodash';
 
-const Filter = ({ column, id, list, setFilter, disableSort, loading = false }) => {
+const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false }) => {
 	const [selected, setSelected] = useState(['(Blank)', ...list]);
 	const [newOptions, setNewOptions] = useState(['(Blank)', ...list]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
@@ -135,7 +135,7 @@ const Filter = ({ column, id, list, setFilter, disableSort, loading = false }) =
 			z2aType = sort === 'DESC' ? 'primary' : 'default';
 		return (
 			<>
-				{!disableSort && (
+				{!disableSortBy && (
 					<>
 						<div>
 							<h4>Sort</h4>
