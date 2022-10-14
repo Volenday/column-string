@@ -116,7 +116,7 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 		);
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
-		else column.clearSortBy();
+		else if (column.clearSortBy) column.clearSortBy();
 	};
 
 	const onSelectAll = () => {
