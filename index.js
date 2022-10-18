@@ -127,7 +127,7 @@ const Cell = memo(
 		};
 
 		if (editable && !multiple && !richText) {
-			const InputText = require('@volenday/input-text').default;
+			const InputText = require('@volenday/ahamatic').InputString;
 			const { Controller, useForm } = require('react-hook-form');
 
 			const formRef = useRef();

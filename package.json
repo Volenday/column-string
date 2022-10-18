@@ -11,7 +11,7 @@
 	},
 	"main": "dist/index.min.js",
 	"peerDependencies": {
-		"@volenday/input-text": "^2.2.2",
+		"@volenday/ahamatic": "^0.0.25",
 		"antd": "^4.8.5",
 		"cleave.js": "^1.6.0",
 		"react": "^17.0.1",
