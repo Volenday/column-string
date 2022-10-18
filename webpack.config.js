@@ -56,7 +56,7 @@ module.exports = {
 		libraryTarget: 'commonjs2'
 	},
 	externals: {
-		'@volenday/input-text': '@volenday/input-text',
+		'@volenday/ahamatic': '@volenday/ahamatic',
 		antd: 'antd',
 		'@ant-design/icons': '@ant-design/icons',
 		'cleave.js': 'cleave.js',
