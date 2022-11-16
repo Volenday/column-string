@@ -99,7 +99,12 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 
 	const handleSearch = value => {
 		if (value === '') return setNewOptions(list);
-		setNewOptions(list.filter(d => d.match(new RegExp(value, 'i'))));
+
+		// Replace parentheses with escaped parentheses so that regex don't read it as a group
+		value = value.replace(/\(/gi, '\\(');
+		value = value.replace(/\)/gi, '\\)');
+
+		setNewOptions(list.filter(d => d.match(new RegExp(value, 'gi'))));
 	};
 
 	const onOk = () => {
