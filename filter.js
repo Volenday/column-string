@@ -5,9 +5,13 @@ import striptags from 'striptags';
 import { FixedSizeList } from 'react-window';
 import { isEqual } from 'lodash';
 
-const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false }) => {
-	const [selected, setSelected] = useState(['(Blank)', ...list]);
-	const [newOptions, setNewOptions] = useState(['(Blank)', ...list]);
+const Filter = ({ column, id, list, listObject, setFilter, disableSortBy, loading = false, useListObject }) => {
+	const [selected, setSelected] = useListObject
+		? useState(['(Blank)', ...listObject])
+		: useState(['(Blank)', ...list]);
+	const [newOptions, setNewOptions] = useListObject
+		? useState(['(Blank)', ...listObject])
+		: useState(['(Blank)', ...list]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [sort, setSort] = useState('');
 	const [selectedAll, setSelectedtAll] = useState(false);
@@ -16,20 +20,28 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 	const withFilterValue = column.filterValue ? (column.filterValue.length !== 0 ? true : false) : false;
 
 	useEffect(() => {
-		if (!!column.filterValue)
-			setSelected(prev =>
-				column.filterValue.length === 0 ? prev : column.filterValue.map(d => (d === '' ? '(Blank)' : d))
-			),
-				setSelectedtAll(column.filterValue.length === list.length + 1 ? true : false);
-	}, [JSON.stringify(column.filterValue)]);
+		if (!!column.filterValue) {
+			setSelected(prev => {
+				return column.filterValue.length === 0
+					? prev
+					: column.filterValue.map(d =>
+							d === '' ? '(Blank)' : useListObject ? newOptions.find(e => e.originalData === d) : d
+					  );
+			});
+
+			if (useListObject) setSelectedtAll(selected.length === listObject.length + 1 ? true : false);
+			else setSelectedtAll(selected.length === list.length + 1 ? true : false);
+		}
+	}, [JSON.stringify(column.filterValue), useListObject, newOptions]);
 
 	useEffect(() => {
 		setSort(column.isSorted ? (column.isSortedDesc ? 'DESC' : 'ASC') : '');
 	}, [column.isSorted, column.isSortedDesc]);
 
 	useEffect(() => {
-		setSelectedtAll(selected.length === list.length + 1 ? true : false);
-	}, [selected.length]);
+		if (useListObject) setSelectedtAll(selected.length === listObject.length + 1 ? true : false);
+		else setSelectedtAll(selected.length === list.length + 1 ? true : false);
+	}, [selected.length, useListObject]);
 
 	const selectItem = value => {
 		if (selected.includes(value)) setSelected(selected.filter(d => d !== value));
@@ -39,7 +51,7 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 	const Row = useCallback(
 		({ index, style }) => {
 			const item = newOptions[index];
-			const text = striptags(typeof item === 'string' ? item : '');
+			const text = striptags(typeof item === 'string' ? item : typeof item === 'object' ? item.cleanedData : '');
 
 			const finalValue =
 				text.length >= 55 ? (
@@ -79,8 +91,8 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 			return (
 				<div style={{ ...style, cursor: 'pointer', padding: '5px 0px', borderBottom: '1px solid #f0f0f0' }}>
 					<Checkbox
-						checked={selected.includes(item)}
-						onChange={() => selectItem(item)}
+						checked={selected.includes(typeof item === 'string' || typeof item === 'object' ? item : '')}
+						onChange={() => selectItem(typeof item === 'string' || typeof item === 'object' ? item : '')}
 						style={{ textAlign: 'justify' }}>
 						{finalValue}
 					</Checkbox>
@@ -98,13 +110,21 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 	};
 
 	const handleSearch = value => {
-		if (value === '') return setNewOptions(list);
+		if (value === '') {
+			if (!useListObject) return setNewOptions(list);
+			else return setNewOptions(listObject);
+		}
 
 		// Replace parentheses with escaped parentheses so that regex don't read it as a group
 		value = value.replace(/\(/gi, '\\(');
 		value = value.replace(/\)/gi, '\\)');
 
-		setNewOptions(list.filter(d => d.match(new RegExp(value, 'gi'))));
+		let foundData = [];
+
+		if (!useListObject) foundData = list.filter(d => d.match(new RegExp(value, 'gi')));
+		else foundData = listObject.filter(d => d.cleanedData.match(new RegExp(value, 'gi')));
+
+		setNewOptions(foundData);
 	};
 
 	const onOk = () => {
@@ -113,11 +133,13 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 			selectedAll
 				? isEqual(
 						newOptions.filter(d => d !== '(Blank)'),
-						list
+						!useListObject ? list : listObject
 				  )
 					? []
 					: newOptions
-				: selected.map(d => (d === '(Blank)' ? '' : d))
+				: selected.map(d =>
+						d === '(Blank)' ? '' : typeof d === 'string' ? d : typeof d === 'object' ? d.originalData : ''
+				  )
 		);
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
@@ -126,7 +148,7 @@ const Filter = ({ column, id, list, setFilter, disableSortBy, loading = false })
 
 	const onSelectAll = () => {
 		if (selectedAll) return onClearAll();
-		setSelected(['(Blank)', ...list]);
+		useListObject ? setSelected(['(Blank)', ...listObject]) : setSelected(['(Blank)', ...list]);
 		setSelectedtAll(true);
 	};
 
